@@ -39,12 +39,18 @@
                 console.log("商品は以下の" + (Item.number - 1) + "種類です。");
                 console.log(""); // 空行の出力
             }
-
-            // 商品購入の関数（課題4-2以降で実装）
+            
+            // 商品購入の関数
             buyItem() {          
                 if (this.stock >= 1) { 
-                    console.log("商品番号: "+this.id+", 商品名: "+this.name+"を購入します。");
-                    // 今後実装予定：在庫減らす、HTML更新
+                    console.log("商品番号: " + this.id + ", 商品名: " + this.name + "を購入します。");
+                    // 課題4-2. 在庫を減らす
+                    this.stock--;
+                    
+                    // 課題4-3. HTML内の在庫表示を更新
+                    document.getElementById("stock" + this.id).innerText = this.stock;
+
+                    console.log("残りは" + this.stock + "個です。");
                 } else {
                     console.log(this.name + "は商品の在庫がないため購入できません。");
                 }
@@ -64,9 +70,25 @@
             item_list[i] = new Item(items[i].name, items[i].price, items[i].stock);
         }
 
-        // 課題4-2と4-3はまだ未実装
+        // 課題4-2. 商品表の作成
+        for (let i = 0; i < item_list.length; i++) {
+            itemArea.innerHTML += `
+                <tr>
+                    <td>${item_list[i].name}</td>
+                    <td>${item_list[i].price}</td>
+                    <td id="stock${item_list[i].id}">${item_list[i].stock}</td>
+                    <td><button id="button${item_list[i].id}">購入</button></td>
+                </tr>`;
+        }
 
-        // 商品一覧をコンソール出力
+        // クリックイベント時の購入処理の設定
+        for (let i = 0; i < item_list.length; i++) {
+            // 課題4-3. イベント設定
+            document.getElementById("button" + item_list[i].id).onclick = () => {
+                item_list[i].buyItem();
+            }
+        }
+
         Item.showItemList(item_list);
 
     </script>
